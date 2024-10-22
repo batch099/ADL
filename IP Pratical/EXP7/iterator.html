@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" 
+content="IE=edge">
+<title></title>
+<meta name="description" content="">
+<meta name="viewport" 
+content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="">
+</head>
+<body>
+<h3>JavaScript Iterators </h3>
+<p id="demo"></p>
+<script>
+myNumbers={};
+myNumbers[Symbol.iterator]= function(){
+let n= 0;
+done=false;
+return{
+next(){
+n+=1;
+if (n==10){
+done=true;
+}
+return{value:n,done:done};
+}
+};
+}
+let text="";
+for(const num of myNumbers){
+text+=num+"<br>";
+}
+document.getElementById("demo").innerHTML
+=text;
+</script>
+</body>
+</html>
