@@ -1,0 +1,14 @@
+import json
+
+def lambda_handler(event, context):
+    first_no = 100
+    second_no = 200
+    sum = first_no + second_no
+    return sum
+
+
+import json
+
+def lambda_handler(event, context):
+    if event["name"] == "your_name":
+        return "APSIT"
