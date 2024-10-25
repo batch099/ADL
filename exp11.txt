@@ -29,3 +29,13 @@ console.log(message);
 
 return message;
 };
+
+
+
+EXP7
+node { 
+stage('cloning from GIT') { 
+git branch: 'main', credentialsId: 'GIT_REPO', url: 'http://github.com/vishal003/jenkins
+sonarqube/' 
+} 
+} 
