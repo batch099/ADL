@@ -1,0 +1,93 @@
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+sudo apt install unzip
+
+sudo unzip awscliv2.zip
+
+sudo ./aws/install
+
+aws --version
+
+aws configure
+
+
+mkdir project-terraform
+cd project-terraform
+
+variable.tf
+
+variable "aws_region" {
+description = "The AWS region to create things in."
+default = "us-east-1"
+}
+
+variable "terraform" {
+description = " SSH keys to connect to ec2 instance"
+default = "terraform"
+}
+
+variable "instance_type" {
+description = "instance type for ec2"
+default     = "t2.micro"
+}
+
+main.tf
+
+provider "aws" {
+region = var.aws_region
+}
+
+#Create security group with firewall rules
+resource "aws_security_group" "security_jenkins_port" {
+name = "security_jenkins_port"
+description = "security group for jenkins"
+
+ingress {
+from_port = 8080
+to_port = 8080
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+
+ingress {
+from_port = 22
+to_port = 22
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+# outbound from jenkis server
+
+egress {
+from_port = 0
+to_port = 65535
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+
+tags= {
+Name = "security_jenkins_port"
+}
+}
+
+resource "aws_instance" "myFirstInstance" {
+ami = "Your ami Instance"
+key_name = var.terraform
+instance_type = var.instance_type
+security_groups= [ "security_jenkins_port"]
+tags= {
+Name = "jenkins_instance"
+}
+}
+
+# Create Elastic IP address
+resource "aws_eip" "myFirstInstance" {
+vpc = true
+instance = aws_instance.myFirstInstance.id
+tags= {
+Name = "jenkins_elstic_ip"
+}
+}
+
+terraform init
+terraform plan
+terraform apply
